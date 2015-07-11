@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Navigator</title>
-	<link rel="stylesheet" type="text/css" href="./routes.css">
+	<link rel="stylesheet" type="text/css" href="./navigator.css">
 </head>
 <body>
 	<div id="navigator-content" class="panel">
@@ -21,51 +21,89 @@
 	</div>
 
 	<script type="text/javascript">
+        geotab.addin.navigator = function (api, state) {
 
-        geotab.addin.routes = function (api, state) {
+			var currentLocation;
+            var interests = document.getElementsByClassName("interest");
+			var interestClick = function (e) {
+				var interest = e.currentTarget.dataset.location;
+				window.location.replace("geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + interest);
+			};
 
-			var currentLocation,
-                interests = document.getElementsByClassName("interest"),
-                interestClick = function (e) {
-                    var interest = e.currentTarget.dataset.location;
-                    window.location.replace("geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + interest);
-                };
+			var addEventListeners = function () {
+				for (var i = 0; i < interests.length; i++) {
+					interests[i].addEventListener('click', interestClick, false);
+				}
+			};
 
-            for (var i = 0; i < interests.length; i++) {
-                interests[i].addEventListener('click', interestClick, false);
-            }
+			var clear = function () {
+				for (var i = 0; i < interests.length; i++) {
+					interests[i].removeEventListener('click', interestClick. false);
+				}
+			};
 
 			return {
+				/**
+				 *  initialize() is called only once when your custom page is first accessed.
+				 *  Use this method to initialize variables required by your addin.
+				 */
 				initialize: function (api, state, callback) {
                     var deviceId = state.device.id;
-					api.call("Get", { typeName: "DeviceStatusInfo", search: { deviceSearch: { id: deviceId } } }, function (result) {
+					var deviceStatusInfo = {
+						typeName: "DeviceStatusInfo",
+						search: {
+							deviceSearch: {
+								id: deviceId
+							}
+						}
+					};
+					var gpsFallback = function () {
+						// Fallback to tablet/phone for geolocation
+						api.mobile.geolocation.getCurrentPosition(function (location) {
+							currentLocation = location.coords;
+							callback();
+						}, function () {
+							// Fails on error
+							currentLocation = { latitude: 0, longitude: 0 };
+							callback();
+						}, {
+							timeout: 5000
+						});
+					};
+
+					// Get the DeviceStatusInfo for current device
+					api.call("Get", deviceStatusInfo, function (result) {
 						if (result.length == 0) {
-
-                            // Fallback to tablet/phone for geolocation
-                            api.mobile.geolocation.getCurrentPosition(function (location) {
-                                currentLocation = location.coords;
-                                callback();
-                            }, function () {
-                                // Fails on error
-                                currentLocation = { latitude: 0, longitude: 0 };
-                                callback();
-                            }, {
-                                timeout: 5000
-                            });
-
+							gpsFallback();
                             return;
 						}
 
-                        currentLocation = { latitude: result[0].latitude, longitude: result[0].longitude };
+                        currentLocation = {
+							latitude: result[0].latitude,
+							longitude: result[0].longitude
+						};
+
 						callback();
+					}, function (error) {
+						console.log("DeviceStatusInfo error", error);
+						gpsFallback();
 					});
 				},
 
+				/**
+				 *  focus() is called after the user interface has loaded or state of the organization filter is changed.
+				 *  Use this method to first interact with the user or elements on the page.
+				 */
 				focus: function () {
+					addEventListeners();
 				},
 
+				/**
+				 *  blur() is called when the user is navigating away from your page.
+				 *  Use this method to save any required state.
+				 */
 				blur: function () {
-
+					clear();
 				}
 			};
 		}
