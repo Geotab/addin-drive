@@ -11,51 +11,72 @@
 	</div>
 	<script type="text/javascript">
 		geotab.addin.panicButton = function (api, state) {
-			var panicButton = document.getElementById("panicButton-call"),
-				panicTimeout = null,
-				panicPress = function (event) {
-					event.target.classList.add("press");
-					panicTimeout = setTimeout(function () {
-						var sendEmail = function (results) {
-							var subject = api.userName + " in distress",
-								body = "I am distressed at " + results[0].formattedAddress,
-								emailObj = {
-									body: body,
-									subject: subject,
-									email: "mikemurkovic@geotab.com"
-								};
+			var panicButton = document.getElementById("panicButton-call");
+			var panicTimeout = null;
 
-							api.call("SendEmail", emailObj, function(success) {
-								alert("Signal sent!");
-							}, function (error) {
-								alert("Signal not sent!");
-							});
-						};
-						getAddress = function (loc) {
-							api.call("GetAddresses", {"coordinates": [{x: loc.coords.longitude, y: loc.coords.latitude}]}, sendEmail);
-						};
-						event.target.classList.remove("press");
+			var panicPress = function (event) {
+				event.currentTarget.classList.add("press");
+				panicTimeout = setTimeout(function () {
 
-						api.mobile.geolocation.getCurrentPosition(getAddress);
-					}, 3000);
-				},
-				panicStop = function (event) {
-					event.target.classList.remove("press");
-					clearTimeout(panicTimeout);
-				};
+					var sendEmail = function (results) {
+						var subject = api.userName + " in distress";
+						var body = "I am distressed at " + results[0].formattedAddress;
+						var emailObj = {
+							body: body,
+							subject: subject,
+							email: "mikemurkovic@geotab.com"
+						};
+
+						api.call("SendEmail", emailObj, function(success) {
+							alert("Signal sent!");
+						}, function (error) {
+							alert("Signal not sent!");
+						});
+					};
+
+					var getAddress = function (loc) {
+						var location = {
+							"coordinates": [{ x: loc.coords.longitude, y: loc.coords.latitude }]
+						};
+						api.call("GetAddresses", location, sendEmail);
+					};
+
+					event.currentTarget.classList.remove("press");
+
+					api.mobile.geolocation.getCurrentPosition(getAddress);
+				}, 3000);
+			};
+
+			var panicStop = function (event) {
+				event.currentTarget.classList.remove("press");
+				clearTimeout(panicTimeout);
+			};
 
 			return {
+				/**
+				 *  initialize() is called only once when your custom page is first accessed.
+				 *  Use this method to initialize variables required by your addin.
+				 */
 				initialize: function (api, state, callback) {
+
+				},
+
+				/**
+				 *  focus() is called after the user interface has loaded or state of the organization filter is changed.
+				 *  Use this method to first interact with the user or elements on the page.
+				 */
+				focus: function () {
 					panicButton.addEventListener("mousedown", panicPress);
 					panicButton.addEventListener("mouseup", panicStop);
 				},
 
-				focus: function () {
-					console.log("Focus");
-				},
-
+				/**
+				 *  blur() is called when the user is navigating away from your page.
+				 *  Use this method to save any required state.
+				 */
 				blur: function () {
-					console.log("Blur");
+					panicButton.removeEventListener("mousedown", panicPress);
+					panicButton.removeEventListener("mouseup", panicStop);
 				}
 			};
 		}

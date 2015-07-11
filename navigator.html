@@ -57,14 +57,21 @@
 							}
 						}
 					};
+
+					// Fallback to tablet/phone for geolocation
 					var gpsFallback = function () {
-						// Fallback to tablet/phone for geolocation
 						api.mobile.geolocation.getCurrentPosition(function (location) {
-							currentLocation = location.coords;
+							currentLocation = {
+								latitude: location.coords.latitude,
+								longitude: location.coords.latitude
+							};
 							callback();
 						}, function () {
 							// Fails on error
-							currentLocation = { latitude: 0, longitude: 0 };
+							currentLocation = {
+								latitude: 0,
+								longitude: 0
+							};
 							callback();
 						}, {
 							timeout: 5000
@@ -73,6 +80,7 @@
 
 					// Get the DeviceStatusInfo for current device
 					api.call("Get", deviceStatusInfo, function (result) {
+						// No data returned from server for that device
 						if (result.length == 0) {
 							gpsFallback();
                             return;
