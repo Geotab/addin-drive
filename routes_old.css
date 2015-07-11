@@ -1,0 +1,11 @@
+#routeSelect {
+	font-size: 3rem;
+	float: right;
+	padding: 2rem;
+
+	border: solid 3px #B4B4B4;
+	background: #FFFFFF;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+}

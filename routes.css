@@ -1,0 +1,26 @@
+.navigate-gas-station {
+	width: 32px;
+	height: 32px;
+	background: url(navigate_gas_station.png) no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 2rem;
+}
+
+.navigate-truck {
+	width: 32px;
+	height: 32px;
+	background: url(navigate_truck.png) no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 2rem;
+}
+
+.navigate-restaurant {
+	width: 32px;
+	height: 32px;
+	background: url(navigate_restaurant.png) no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 2rem;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Navigator</title>
+	<link rel="stylesheet" type="text/css" href="./routes.css">
+</head>
+<body>
+	<div id="navigator-content" class="panel">
+		<h3 class="panel-title">Navigate</h3>
+		<ul class="menu-list">
+			<li class="interest" data-location="gas stations">
+				<a><i class="navigate-gas-station"></i><span>Gas stations</span></a>
+			</li>
+            <li class="interest" data-location="road stop">
+                <a><i class="navigate-truck"></i><span>Truck stop</span></a>
+            </li>
+            <li class="interest" data-location="restaurants">
+				<a><i class="navigate-restaurant"></i><span>Restaurants</span></a>
+			</li>
+		</ul>
+	</div>
+
+	<script type="text/javascript">
+
+        geotab.addin.routes = function (api, state) {
+
+			var currentLocation,
+                interests = document.getElementsByClassName("interest"),
+                interestClick = function (e) {
+                    var interest = e.currentTarget.dataset.location;
+                    window.location.replace("geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + interest);
+                };
+
+            for (var i = 0; i < interests.length; i++) {
+                interests[i].addEventListener('click', interestClick, false);
+            }
+
+			return {
+				initialize: function (api, state, callback) {
+                    var deviceId = state.device.id;
+					api.call("Get", { typeName: "DeviceStatusInfo", search: { deviceSearch: { id: deviceId } } }, function (result) {
+						if (result.length == 0) {
+
+                            // Fallback to tablet/phone for geolocation
+                            api.mobile.geolocation.getCurrentPosition(function (location) {
+                                currentLocation = location.coords;
+                                callback();
+                            }, function () {
+                                // Fails on error
+                                currentLocation = { latitude: 0, longitude: 0 };
+                                callback();
+                            }, {
+                                timeout: 5000
+                            });
+
+                            return;
+						}
+
+                        currentLocation = { latitude: result[0].latitude, longitude: result[0].longitude };
+						callback();
+					});
+				},
+
+				focus: function () {
+				},
+
+				blur: function () {
+
+				}
+			};
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+#panicButton-container {
+	width: 95%;
+	margin: 0 auto;
+	padding: 1em;
+	text-align: center;
+}
+
+#panicButton-call {
+	font-size: 2em;
+	font-weight: bold;
+	padding: 1em;
+	color: #fff;
+
+	background-size: 200% 100%;
+	background-image: linear-gradient(to right, #066ea8 50%, red 50%);
+	-webkit-transition: background-position 3s;
+	-moz-transition: background-position 3s;
+	transition: background-position 3s ease-in;
+}
+
+#panicButton-call.press {
+    background-position: -100% 0;
+}
