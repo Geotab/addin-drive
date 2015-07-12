@@ -33,7 +33,7 @@
 						// Device intent
 						url = "geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + encodeURI(interest);
 					} else {
-						url = "https://maps.google.com/maps?ll=" + currentLocation.latitude + "," + currentLocation.longitude + "&q=" + encodeURI(interest);
+						url = "https://maps.google.com/maps?z=15&ll=" + currentLocation.latitude + "," + currentLocation.longitude + "&q=" + encodeURI(interest);
 					}
 					
 					window.location.replace(url);
