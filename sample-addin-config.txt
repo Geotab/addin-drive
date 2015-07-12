@@ -1,0 +1,40 @@
+// Distress
+{
+    "name": "Distress",
+    "items": [
+        {
+            "icon": "data:image/png;base64,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",
+            "path": "DriveAppLink/",
+            "menuName": {
+                "en": "Distress"
+            },
+            "url": "distress.html"
+        }
+    ],
+    "supportEmail": "mikemurkovic@geotab.com",
+    "signature": "12345-MYSIGNATURE",
+    "version": "1.0",
+    "key": "12345-MYAPIKEY",
+    "isSigned": false
+}
+
+
+// Navigator
+{
+    "name": "Navigator",
+    "items": [
+        {
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACm0lEQVRYR7XXXejPdxQH8Nff0rSSpJVG0iKU1JSbTUlJZpvyFEJcIZtMuUNzsbmRNnnY1qTIc7GlNXkIrYYLSVyskZJWYmxSnmvTqa/18/f5fj+f3x/n9pzzPu/O5zx9OpRLd3yMyRiFAeiBu7iEX7Eb58oh6Sg0noOvqqA5l+NYhgs5w9DnCLyFbZhWAtZi86QisSnn10Qggh/G6BxIg34VvmzybyKwBzNeIvgz15nYW4dTR2A69r2C4AHxD4bgrxReikA3/IFBNQTuYwuO4DYGYhYmNRBeh+WlBCbgUA3YZXyIKwl9tGe04ZsJ3R30xaPOulQGvsPCBMhDjECQqJPFqKv88ThaQiAGyXuJCN9jUaYu3sBV9E/YraxmyXOqVAZuoU8CIGbB/oLC3I65CbsfsKAkA/cQM6CzjMXJAgLfYGnCbidiomYzcL0qmM6286upmONwEJ+UPmHqCX7D+wmA6IyJmejxdNdqMrgCa0oy8DU+rwk0FQcaSOzA7Bp9ZOXnEgIfpQwrx+jjT7EV/7WA9cJ6zKsJ/i/ext8lBGKQ3ECA1knMgmMV4LvV0zTZn8IHKbC6XfBtQc/nirFVvwQb2yEwHBfbidBg+wDvIMbxC9K0jqNgoh5eVjZXdZPEaSIwEmcLrqYmgo8xuGrNtgmEQ1NblWQmpmLch7WSuwn74Xf0LInWyeYmhlYHSZcJhONn2NAFAjGQduX8chkI/7A5gTE5sBb9j5hSYl9CIHDiE3IevQtA/6zuiVjrWSklEEBx8/2U6Yqo+sjUmWzkyqAdAuGyGl80gJeu7P8h2iUQ9nHxvHBYILluc5lol0DgxSf1F4xrAa89u18HgcCMzXcaw6pWi4y0rudc3C4/QStwfFzWVt+3KL4uyVNw12sh5aDHugAAAABJRU5ErkJggg==",
+            "path": "DriveAppLink/",
+            "menuName": {
+                "en": "Navigator"
+            },
+            "url": "navigator.html"
+        }
+    ],
+    "supportEmail": "mikemurkovic@geotab.com",
+    "signature": "12345-MYSIGNATURE",
+    "version": "1.0",
+    "key": "12345-MYAPIKEY",
+    "isSigned": false
+}
