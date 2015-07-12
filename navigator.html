@@ -11,7 +11,7 @@
 			<li class="interest" data-location="gas stations">
 				<a><i class="navigate-gas-station"></i><span>Gas stations</span></a>
 			</li>
-            <li class="interest" data-location="road stop">
+            <li class="interest" data-location="truck stop">
                 <a><i class="navigate-truck"></i><span>Truck stop</span></a>
             </li>
             <li class="interest" data-location="restaurants">
@@ -31,9 +31,9 @@
 					
 					if (api.mobile.device) {
 						// Device intent
-						url = "geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + interest;
+						url = "geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + encodeURI(interest);
 					} else {
-						url = "https://maps.google.com/maps?q=" + currentLocation.latitude + "," + currentLocation.longitude;
+						url = "https://maps.google.com/maps?ll=" + currentLocation.latitude + "," + currentLocation.longitude + "&q=" + encodeURI(interest);
 					}
 					
 					window.location.replace(url);
