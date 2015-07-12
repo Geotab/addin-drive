@@ -26,21 +26,30 @@
 			var currentLocation;
             var interests = document.getElementsByClassName("interest");
 			var interestClick = function (e) {
-				var interest = e.currentTarget.dataset.location;
-				window.location.replace("geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + interest);
-			};
+					var interest = e.currentTarget.dataset.location;
+					var url;
+					
+					if (api.mobile.device) {
+						// Device intent
+						url = "geo:" + currentLocation.latitude + "," + currentLocation.longitude + "?q=" + interest;
+					} else {
+						url = "https://maps.google.com/maps?q=" + currentLocation.latitude + "," + currentLocation.longitude;
+					}
+					
+					window.location.replace(url);
+				};
 
 			var addEventListeners = function () {
-				for (var i = 0; i < interests.length; i++) {
-					interests[i].addEventListener('click', interestClick, false);
-				}
-			};
+					for (var i = 0; i < interests.length; i++) {
+						interests[i].addEventListener('click', interestClick, false);
+					}
+				};
 
 			var clear = function () {
-				for (var i = 0; i < interests.length; i++) {
-					interests[i].removeEventListener('click', interestClick. false);
-				}
-			};
+					for (var i = 0; i < interests.length; i++) {
+						interests[i].removeEventListener('click', interestClick. false);
+					}
+				};
 
 			return {
 				/**
@@ -50,33 +59,33 @@
 				initialize: function (api, state, callback) {
                     var deviceId = state.device.id;
 					var deviceStatusInfo = {
-						typeName: "DeviceStatusInfo",
-						search: {
-							deviceSearch: {
-								id: deviceId
+							typeName: "DeviceStatusInfo",
+							search: {
+								deviceSearch: {
+									id: deviceId
+								}
 							}
-						}
-					};
+						};
 
 					// Fallback to tablet/phone for geolocation
 					var gpsFallback = function () {
-						api.mobile.geolocation.getCurrentPosition(function (location) {
-							currentLocation = {
-								latitude: location.coords.latitude,
-								longitude: location.coords.latitude
-							};
-							callback();
-						}, function () {
-							// Fails on error
-							currentLocation = {
-								latitude: 0,
-								longitude: 0
-							};
-							callback();
-						}, {
-							timeout: 5000
-						});
-					};
+							api.mobile.geolocation.getCurrentPosition(function (location) {
+								currentLocation = {
+									latitude: location.coords.latitude,
+									longitude: location.coords.latitude
+								};
+								callback();
+							}, function () {
+								// Fails on error
+								currentLocation = {
+									latitude: 0,
+									longitude: 0
+								};
+								callback();
+							}, {
+								timeout: 5000
+							});
+						};
 
 					// Get the DeviceStatusInfo for current device
 					api.call("Get", deviceStatusInfo, function (result) {

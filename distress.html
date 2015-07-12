@@ -2,33 +2,42 @@
 <html>
 <head>
 	<title>Distress</title>
-	<link rel="stylesheet" type="text/css" href="./distress.css">
+	<link rel="stylesheet" type="text/css" href="distress.css">
 </head>
 <body>
-	<div id="panicButton-container">
-		<button id="panicButton-call">Send Distress Call</button>
+	<div id="distressButton-container">
+		<button id="distressButton-call">Send Distress Call</button>
 		<p>Hold the button for 3 seconds to alert a manager</p>
+		<div id="distressSent">Distress email sent!</div>
 	</div>
 	<script type="text/javascript">
-		geotab.addin.panicButton = function (api, state) {
-			var panicButton = document.getElementById("panicButton-call");
-			var panicTimeout = null;
+		geotab.addin.distress = function (api, state) {
+			var distressButton = document.getElementById("distressButton-call");
+			var distressSent = document.getElementById("distressSent");
+			var distressTimeout = null;
 
-			var panicPress = function (event) {
-				event.currentTarget.classList.add("press");
-				panicTimeout = setTimeout(function () {
+			var distressPress = function (event) {
+				event.target.classList.add("press");
+				distressTimeout = setTimeout(function () {
 
 					var sendEmail = function (results) {
-						var subject = api.userName + " in distress";
+						var subject = api.user + " in distress";
 						var body = "I am distressed at " + results[0].formattedAddress;
 						var emailObj = {
-							body: body,
-							subject: subject,
-							email: "mikemurkovic@geotab.com"
-						};
+								body: body,
+								bodyHtml: body,
+								subject: subject,
+								email: "test@example.com"
+							};
 
 						api.call("SendEmail", emailObj, function(success) {
-							alert("Signal sent!");
+							
+							// Display sent message and fade it away
+							distressSent.classList.add("sent");
+							setTimeout(function () {
+								distressSent.classList.remove("sent");
+							}, 3000);
+							
 						}, function (error) {
 							alert("Signal not sent!");
 						});
@@ -36,20 +45,20 @@
 
 					var getAddress = function (loc) {
 						var location = {
-							"coordinates": [{ x: loc.coords.longitude, y: loc.coords.latitude }]
-						};
+								"coordinates": [{ x: loc.coords.longitude, y: loc.coords.latitude }]
+							};
 						api.call("GetAddresses", location, sendEmail);
 					};
 
-					event.currentTarget.classList.remove("press");
+					event.target.classList.remove("press");
 
 					api.mobile.geolocation.getCurrentPosition(getAddress);
 				}, 3000);
 			};
 
-			var panicStop = function (event) {
-				event.currentTarget.classList.remove("press");
-				clearTimeout(panicTimeout);
+			var distressStop = function (event) {
+				event.target.classList.remove("press");
+				clearTimeout(distressTimeout);
 			};
 
 			return {
@@ -58,7 +67,7 @@
 				 *  Use this method to initialize variables required by your addin.
 				 */
 				initialize: function (api, state, callback) {
-
+					callback();
 				},
 
 				/**
@@ -66,8 +75,8 @@
 				 *  Use this method to first interact with the user or elements on the page.
 				 */
 				focus: function () {
-					panicButton.addEventListener("mousedown", panicPress);
-					panicButton.addEventListener("mouseup", panicStop);
+					distressButton.addEventListener("mousedown", distressPress);
+					distressButton.addEventListener("mouseup", distressStop);
 				},
 
 				/**
@@ -75,8 +84,8 @@
 				 *  Use this method to save any required state.
 				 */
 				blur: function () {
-					panicButton.removeEventListener("mousedown", panicPress);
-					panicButton.removeEventListener("mouseup", panicStop);
+					distressButton.removeEventListener("mousedown", distressPress);
+					distressButton.removeEventListener("mouseup", distressStop);
 				}
 			};
 		}
