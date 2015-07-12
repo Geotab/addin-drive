@@ -45,7 +45,7 @@
 					}
 				};
 
-			var clear = function () {
+			var removeEventListeners = function () {
 					for (var i = 0; i < interests.length; i++) {
 						interests[i].removeEventListener('click', interestClick. false);
 					}
@@ -120,7 +120,7 @@
 				 *  Use this method to save any required state.
 				 */
 				blur: function () {
-					clear();
+					removeEventListeners();
 				}
 			};
 		}
