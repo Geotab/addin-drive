@@ -11,23 +11,23 @@
 			<li class="interest" data-location="gas stations">
 				<a><i class="navigate-gas-station"></i><span>Gas stations</span></a>
 			</li>
-            <li class="interest" data-location="truck stop">
-                <a><i class="navigate-truck"></i><span>Truck stop</span></a>
-            </li>
-            <li class="interest" data-location="restaurants">
+      <li class="interest" data-location="truck stop">
+          <a><i class="navigate-truck"></i><span>Truck stop</span></a>
+      </li>
+      <li class="interest" data-location="restaurants">
 				<a><i class="navigate-restaurant"></i><span>Restaurants</span></a>
 			</li>
 		</ul>
 	</div>
 
 	<script type="text/javascript">
-        geotab.addin.navigator = function (api, state) {
+	    geotab.addin.navigator = function (api, state) {
 
-			var currentLocation;
-            var interests = document.getElementsByClassName("interest");
-			var interestClick = function (e) {
-					var interest = e.currentTarget.dataset.location;
-					var url;
+			var currentLocation,
+				interests = document.getElementsByClassName("interest"),
+				interestClick = function (e) {
+					var interest = e.currentTarget.dataset.location,
+						url;
 					
 					if (api.mobile.device) {
 						// Device intent
@@ -37,15 +37,15 @@
 					}
 					
 					window.location.replace(url);
-				};
+				},
 
-			var addEventListeners = function () {
+				addEventListeners = function () {
 					for (var i = 0; i < interests.length; i++) {
 						interests[i].addEventListener('click', interestClick, false);
 					}
-				};
+				},
 
-			var removeEventListeners = function () {
+				removeEventListeners = function () {
 					for (var i = 0; i < interests.length; i++) {
 						interests[i].removeEventListener('click', interestClick. false);
 					}
@@ -57,18 +57,17 @@
 				 *  Use this method to initialize variables required by your addin.
 				 */
 				initialize: function (api, state, callback) {
-                    var deviceId = state.device.id;
-					var deviceStatusInfo = {
+	          		var deviceId = state.device.id,
+	          			deviceStatusInfo = {
 							typeName: "DeviceStatusInfo",
 							search: {
 								deviceSearch: {
 									id: deviceId
 								}
 							}
-						};
-
-					// Fallback to tablet/phone for geolocation
-					var gpsFallback = function () {
+						},
+						gpsFallback = function () {
+							// Fallback to tablet/phone for geolocation
 							api.mobile.geolocation.getCurrentPosition(function (location) {
 								currentLocation = {
 									latitude: location.coords.latitude,
@@ -92,23 +91,23 @@
 						// No data returned from server for that device
 						if (result.length == 0) {
 							gpsFallback();
-                            return;
+	         				 return;
 						}
 
-                        currentLocation = {
+	            		currentLocation = {
 							latitude: result[0].latitude,
 							longitude: result[0].longitude
 						};
 
 						callback();
 					}, function (error) {
-						console.log("DeviceStatusInfo error", error);
-						gpsFallback();
+							console.log("DeviceStatusInfo error", error);
+							gpsFallback();
 					});
 				},
 
 				/**
-				 *  focus() is called after the user interface has loaded or state of the organization filter is changed.
+				 *  focus() is called after the user interface has loaded or state has changed.
 				 *  Use this method to first interact with the user or elements on the page.
 				 */
 				focus: function () {

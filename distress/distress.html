@@ -10,56 +10,57 @@
 		<p>Hold the button for 3 seconds to alert a manager</p>
 		<div id="distressSent">Distress email sent!</div>
 	</div>
+
 	<script type="text/javascript">
 		geotab.addin.distress = function (api, state) {
-			var distressButton = document.getElementById("distressButton-call");
-			var distressSent = document.getElementById("distressSent");
-			var distressTimeout = null;
+			var distressButton = document.getElementById("distressButton-call"),
+				distressSent = document.getElementById("distressSent"),
+				distressTimeout = null,
 
-			var distressPress = function (event) {
-				event.target.classList.add("press");
-				distressTimeout = setTimeout(function () {
+				distressPress = function (event) {
+					event.target.classList.add("press");
+					distressTimeout = setTimeout(function () {
 
-					var sendEmail = function (results) {
-						var subject = api.user + " in distress";
-						var body = "I am distressed at " + results[0].formattedAddress;
-						var emailObj = {
-								body: body,
-								bodyHtml: body,
-								subject: subject,
-								email: "test@example.com"
-							};
+						var sendEmail = function (results) {
+							var subject = api.user + " in distress";
+							var body = "I am distressed at " + results[0].formattedAddress;
+							var emailObj = {
+									body: body,
+									bodyHtml: body,
+									subject: subject,
+									email: "test@example.com"
+								};
 
-						api.call("SendEmail", emailObj, function(success) {
-							
-							// Display sent message and fade it away
-							distressSent.classList.add("sent");
-							setTimeout(function () {
-								distressSent.classList.remove("sent");
-							}, 3000);
-							
-						}, function (error) {
-							alert("Signal not sent!");
-						});
-					};
+							api.call("SendEmail", emailObj, function(success) {
+								
+								// Display sent message and fade it away
+								distressSent.classList.add("sent");
+								setTimeout(function () {
+									distressSent.classList.remove("sent");
+								}, 3000);
+								
+							}, function (error) {
+								alert("Signal not sent!");
+							});
+						};
 
-					var getAddress = function (loc) {
-						var location = {
-								"coordinates": [{ x: loc.coords.longitude, y: loc.coords.latitude }]
-							};
-						api.call("GetAddresses", location, sendEmail);
-					};
+						var getAddress = function (loc) {
+							var location = {
+									"coordinates": [{ x: loc.coords.longitude, y: loc.coords.latitude }]
+								};
+							api.call("GetAddresses", location, sendEmail);
+						};
 
+						event.target.classList.remove("press");
+
+						api.mobile.geolocation.getCurrentPosition(getAddress);
+					}, 3000);
+				},
+
+				distressStop = function (event) {
 					event.target.classList.remove("press");
-
-					api.mobile.geolocation.getCurrentPosition(getAddress);
-				}, 3000);
-			};
-
-			var distressStop = function (event) {
-				event.target.classList.remove("press");
-				clearTimeout(distressTimeout);
-			};
+					clearTimeout(distressTimeout);
+				};
 
 			return {
 				/**
@@ -71,7 +72,7 @@
 				},
 
 				/**
-				 *  focus() is called after the user interface has loaded or state of the organization filter is changed.
+				 *  focus() is called after the user interface has loaded or state has changed.
 				 *  Use this method to first interact with the user or elements on the page.
 				 */
 				focus: function () {
